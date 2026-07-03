@@ -1,0 +1,17 @@
+### 책 추가
+POST http://localhost:8080/books
+Content-Type: application/json
+
+{"title": "자바의 정석", "author": "남궁성"}
+
+### 책 목록 조회
+GET http://localhost:8080/books
+
+### 특정 책 조회
+GET http://localhost:8080/books/1
+
+### 책 삭제
+DELETE http://localhost:8080/books/3
+
+### 목록 확인 (비어있어야 함)
+GET http://localhost:8080/books
