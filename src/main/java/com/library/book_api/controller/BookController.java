@@ -2,45 +2,39 @@ package com.library.book_api.controller;
 
 import com.library.book_api.model.Book;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import com.library.book_api.repository.BookRepository;
+
 
 @RestController
 
 public class BookController {
 
-    private List<Book> books = new ArrayList<>();
+    private final BookRepository bookRepository;
 
+    public BookController(BookRepository bookRepository){
+        this.bookRepository = bookRepository;
+    }
     @GetMapping("/books")
     public List<Book> getBooks() {
-        return books;
+        return bookRepository.findAll();
     }
 
     @PostMapping("/books")
     public Book addBook(@RequestBody Book book){
-        book.setId((long)(books.size() + 1));
-        books.add(book);
-        return book;
+        return bookRepository.save(book);
     }
 
     @GetMapping("/books/{id}")
     public Book getBook(@PathVariable long id){
-        for(int i = 0; i<books.size(); i++){
-            if(books.get(i).getId()==id){
-                return books.get(i);
-            }
-        }
-        return null;
+        return bookRepository.findById(id).orElse(null);
     }
+
     @DeleteMapping("/books/{id}")
     public void deleteBook(@PathVariable Long id) {
-        // books 리스트에서 id가 일치하는 책을 삭제
-        for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getId() == id) {
-                books.remove(i);
-                break;
-            }
-        }
+        bookRepository.deleteById(id);
     }
 }
